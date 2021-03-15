@@ -1,6 +1,9 @@
 import pandas as pd
 import datetime
+import re
 
+
+# 1
 def df_nan_filter(df):
     """Apply filters on NaN values
     Args:
@@ -19,6 +22,7 @@ def df_nan_filter(df):
     return df
 
 
+# 2
 def change_date_format(date: str):
     """Change date format from dd/mm/yyyy to yyyy-mm-dd
     Args:
@@ -36,7 +40,26 @@ def change_date_format(date: str):
         return date
 
 
+def string_filter(s: str):
+    """Apply filters in order to clean the string.
+    Args:
+      s: string.
+    Returns:
+      Filtered String.
+    Raises:
+      This function shouldn't raise any Exception.
+    """
+    # filter : \\t, \\n, \\U1a1b2c3d4, \\u1a2b, \\x1a
+    # turn \' into '
+    # replace remaining \\ with \
+    # turn multiple spaces into one space
+    s = re.sub(r'''\\+(t|n|U[a-z0-9]{8}|u[a-z0-9]{4}|x[a-z0-9]{2}|[\.]{2})''', ' ', s)
+    s = s.replace('\\\'', '\'').replace('\\\\', '\\')
+    s = re.sub(r' +', ' ', s)
+    return (s)
+
+
 if __name__ == '__main__':
     df = pd.read_csv('../appstore_games.csv')
-    clean = df_nan_filter(df)
-    print(df)
+    dff = df_nan_filter(df)
+    dff["Original Release Date"].apply(lambda x: change_date_format(x))
