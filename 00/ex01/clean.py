@@ -61,5 +61,18 @@ def string_filter(s: str):
 
 if __name__ == '__main__':
     df = pd.read_csv('../appstore_games.csv')
+    # 1
     dff = df_nan_filter(df)
-    dff["Original Release Date"].apply(lambda x: change_date_format(x))
+    # 2
+    dff["Original Release Date"] = dff["Original Release Date"].apply(lambda x: change_date_format(x))
+    # 3
+    dff["Description"] = dff["Description"].apply(lambda x: string_filter(x))
+    # 4
+    dff.drop_duplicates(subset=df.columns[0], inplace=True)
+    # 5
+    dff['Age Rating'] = dff['Age Rating'].apply(lambda x: re.findall(r'\d+', x)[0] )
+    dff['User Rating Count'] = pd.to_numeric(dff['User Rating Count'], downcast='integer')
+    dff['Size'] = pd.to_numeric(dff['Size'], downcast='integer')
+    # 6
+    indexNames = dff[ dff['Name'].apply(len) < 4 ].index
+    dff.drop(indexNames, inplace=True)
