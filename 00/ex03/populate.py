@@ -30,7 +30,7 @@ def create_appstore_games():
         CREATE TABLE IF NOT EXISTS appstore_games(
             game_id bigint PRIMARY KEY,
             name varchar,
-            agv_user_rating float,
+            avg_user_rating float,
             user_rating_count int,
             price float,
             description varchar,
@@ -77,7 +77,39 @@ def create_appstore_games_languages():
 
 def populate_appstore_games():
     print("Populating appstore_games table...")
+    conn = get_connection()
+    curr = conn.cursor()
+    curr.execute("""
+        INSERT INTO appstore_games(
+            game_id,
+            name,
+            avg_user_rating,
+            user_rating_count,
+            price,
+            description,
+            developer,
+            age_rating,
+            size,
+            release_date,
+            last_update
+        )
+        VALUES (
+            1,
+            'hola',
+            5.0,
+            3,
+            4.99,
+            'desc',
+            'hey',
+            4,
+            4536,
+            '12/12/1994',
+            '12/12/1994'
 
+        );
+    """)
+    conn.commit()
+    conn.close()
     return
 
 def populate_appstore_games_genres():
@@ -95,3 +127,4 @@ if __name__ == '__main__':
     create_appstore_games()
     create_appstore_games_genres()
     create_appstore_games_languages()
+    populate_appstore_games()
