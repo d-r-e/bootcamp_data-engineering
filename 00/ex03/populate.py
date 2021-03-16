@@ -5,7 +5,9 @@ def drop_all_tables():
     conn = get_connection()
     curr = conn.cursor()
     curr.execute("""
-        DROP TABLE appstore_games CASCADE;
+        DROP TABLE IF EXISTS appstore_games CASCADE;
+        DROP TABLE IF EXISTS appstore_games_languages CASCADE;
+        DROP TABLE IF EXISTS appstore_games_genres CASCADE;
     """)
     conn.commit()
     conn.close()
@@ -58,7 +60,38 @@ def create_appstore_games_genres():
     conn.commit()
     conn.close()
 
+def create_appstore_games_languages():
+    print("Creating appstore_games_languages table...")
+    conn = get_connection()
+    curr = conn.cursor()
+    curr.execute("""
+        CREATE TABLE IF NOT EXISTS appstore_games_languages(
+            id bigint PRIMARY KEY,
+            game_id bigint,
+            FOREIGN KEY (game_id) REFERENCES appstore_games(game_id),
+            language varchar
+        );
+    """)
+    conn.commit()
+    conn.close()
+
+def populate_appstore_games():
+    print("Populating appstore_games table...")
+
+    return
+
+def populate_appstore_games_genres():
+    print("Populating appstore_games_genres table...")
+    return
+
+def populate_appstore_games_languages():
+    print("Populating appstore_games_languages table...")
+
+    return
+
+
 if __name__ == '__main__':
     drop_all_tables()
     create_appstore_games()
     create_appstore_games_genres()
+    create_appstore_games_languages()
