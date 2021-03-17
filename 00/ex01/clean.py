@@ -76,3 +76,4 @@ if __name__ == '__main__':
     # 6
     indexNames = dff[ dff['Name'].apply(len) < 4 ].index
     dff.drop(indexNames, inplace=True)
+    dff.to_csv('out.csv')
