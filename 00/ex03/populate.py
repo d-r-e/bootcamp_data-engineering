@@ -113,6 +113,20 @@ def populate_appstore_games_genres():
 
 def populate_appstore_games_languages():
     print("Populating appstore_games_languages table...")
+    conn = get_connection()
+    curr = conn.cursor()
+    with open('appstore_games_languages.normalized.csv', 'r') as f:
+        reader = csv.reader(f)
+        next(reader) # Skip the header row.
+        i = 0
+        for row in reader:
+            curr.execute(
+            "INSERT INTO appstore_games_languages VALUES (%s, %s, %s)",
+            row
+            )
+            i+=1
+    conn.commit()
+    conn.close()
     return
 
 
@@ -123,3 +137,4 @@ if __name__ == '__main__':
     create_appstore_games_languages()
     populate_appstore_games()
     populate_appstore_games_genres()
+    populate_appstore_games_languages()
