@@ -30,7 +30,7 @@ def create_appstore_games():
     curr = conn.cursor()
     curr.execute("""
         CREATE TABLE IF NOT EXISTS appstore_games(
-            game_id bigint PRIMARY KEY,
+            game_id int PRIMARY KEY,
             name varchar,
             avg_user_rating float,
             user_rating_count int,
@@ -53,9 +53,13 @@ def create_appstore_games_genres():
     curr.execute("""
         CREATE TABLE IF NOT EXISTS appstore_games_genres(
             id bigint PRIMARY KEY,
-            game_id bigint,
+            game_id int,
+            CONSTRAINT fk_game_id
+                FOREIGN KEY(game_id) 
+                    REFERENCES appstore_games(game_id),
             primary_genre varchar,
             genre varchar
+
         );
     """)
     conn.commit()
